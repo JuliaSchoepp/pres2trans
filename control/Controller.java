@@ -9,37 +9,35 @@ import model.Journal;
 import model.Transaction;
 
 public class Controller {
-
-	public static ObservableList<Transaction> load(Stage primaryStage) {
+	
+	public Journal journal;
+	
+	
+	public ObservableList<Transaction> load(Stage primaryStage) {
+		this.journal = new Journal();
+		// FileChooser, um Datei auszuwählen
 		FileChooser ch = new FileChooser();
 		ch.setTitle("Datei öffnen...");
 		File file = ch.showOpenDialog(primaryStage);
 		if (file == null) return null;
-		Journal journal = new Journal();
-		journal.open(file);
-		ObservableList<Transaction> tableData = FXCollections.observableArrayList(journal.getTransactions());
-		
+		this.journal.open(file);
+		ObservableList<Transaction> tableData = FXCollections.observableArrayList(this.journal.getTransactions());
 		return tableData;
 	}
 	
 
-	public static void save() {
+	public void save() {
 		// TODO Auto-generated method stub
 	}
 	
-	public static void loadTableData(Journal journal){
+
+
+
+	public void submit(String text, String debitAc, String amount, String creditAc) {
+		Transaction t = new Transaction(text, debitAc, Double.valueOf(amount), creditAc, Double.valueOf(amount));
+		System.out.println("Submit");
+		this.journal.addTransaction(t);
 		
-	}
-
-
-	public static Object neu() {
-		// Eingabemaske
-		// Objekt erzeugen
-		// Zu Journal
-		// Zu Observable List
-		// Journal über vorhandene Methode abspeichern
-		// TableView updaten?
-		return null;
 	}
 
 }
