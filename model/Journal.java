@@ -61,6 +61,9 @@ public class Journal {
 					.collect(Collectors.toList());
 	}
 	
+	public ArrayList<Transaction> getTransactions(){
+		return this.journal;
+	}
 	
 	@Override
 	public String toString() {
@@ -131,23 +134,18 @@ public class Journal {
 	}
 	
 	//load a journal file and print the entries on the console
-	public static Journal open() {
+	public void open(File file) {
 		
 		try {
-		//Eingabestrom um Pfad anzugeben	
-		BufferedReader textReader = new BufferedReader(new InputStreamReader (System.in));
-		System.out.println("Please insert path and filename: ");
-		String filename = textReader.readLine();
-		
+
 		//Dateieingabestrom erzeugen, um Datei auszulesen
-		BufferedReader bReader = new BufferedReader(new InputStreamReader (new FileInputStream(filename)));
+		BufferedReader bReader = new BufferedReader(new InputStreamReader (new FileInputStream(file)));
 			
 		//Zeilenweise einlesen, in Journal speichern & ausgeben
-		Journal journal = new Journal();
 		String line;
 		while (bReader.ready()) {
 			line = bReader.readLine();
-			System.out.println(line);
+			//System.out.println(line);
 			String[] tr = line.split("\t");
 			
 			// build transaction object and add to Journal
@@ -159,23 +157,27 @@ public class Journal {
 			String creditAccount = tr[5];
 			double creditAmount = Double.valueOf(tr[6]);
 			Transaction t = new Transaction(nr, text, date, debitAccount, debitAmount, creditAccount, creditAmount);
-			journal.addTransaction(t);
+			this.addTransaction(t);
 	    }
 		
-		textReader.close();
 		bReader.close();
-		
-		return journal;
 		
 			
 		} catch (Exception e) {
 			System.out.println("Fehler - bitte überprüfen, ob Dateipfad korrekt ist.");
 			e.printStackTrace();
-			return null;
 		}
 		
 	}
 	
+	public static ArrayList<Transaction> getTestData(){
+		Journal testJournal = new Journal();
+		testJournal.addTransaction("Buchung 1", "sales", 250, "supplies", 250);
+		testJournal.addTransaction("Buchung 2", "cash", 120, "bank", 120);
+		testJournal.addTransaction("Buchung 3", "cash", 300, "sales", 300);
+		testJournal.addTransaction("Buchung 4", "bank", 50, "cash", 50);
+		return testJournal.getTransactions();
+	}
 	
 	public static void main(String[] args) {
 		Journal testJournal = new Journal();

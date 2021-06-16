@@ -1,8 +1,13 @@
 package view;
 	
+import java.time.LocalDate;
+
 import control.Controller;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.stage.Stage;
+import model.Journal;
 import model.Transaction;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -10,12 +15,15 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 
 
 public class Main extends Application {
 	
 	private TableView<Transaction> table = new TableView<>();
+	private ObservableList<Transaction> tableData;
+	private Stage primaryStage;
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -26,31 +34,41 @@ public class Main extends Application {
 			MenuBar bar = new MenuBar();
 			Menu save = new Menu("Datei");
 			MenuItem laden = new MenuItem("Laden");
-			laden.setOnAction(e -> Controller.load());
+			laden.setOnAction(e -> {
+				this.tableData = Controller.load(primaryStage);
+			});
 			MenuItem speichern = new MenuItem("Speichern");
-			laden.setOnAction(e -> Controller.save());
-			save.getItems().addAll(laden,speichern);
+			speichern.setOnAction(e -> Controller.save());
+			MenuItem neu = new MenuItem("Neue Transaktion");
+			neu.setOnAction(e -> Controller.neu());
+			save.getItems().addAll(laden,speichern, neu);
 			bar.getMenus().add(save);
 			root.setTop(bar);
 			
-			// Table View
-			table.setEditable(true);
-			TableColumn nrCol = new TableColumn("Nr.");
+			// Table View: Columns
+			TableColumn<Transaction, Integer> nrCol = new TableColumn<>("Nr.");
 			nrCol.setMinWidth(100);
-			TableColumn dateCol = new TableColumn("Datum");
+			nrCol.setCellValueFactory(new PropertyValueFactory<>("nr"));
+			TableColumn<Transaction, LocalDate> dateCol = new TableColumn<>("Datum");
 			dateCol.setMinWidth(150);
-			TableColumn textCol = new TableColumn("Text");
+			dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
+			TableColumn<Transaction, String> textCol = new TableColumn<>("Text");
 			textCol.setMinWidth(200);
-			TableColumn debAcCol = new TableColumn("Debit Account");
+			textCol.setCellValueFactory(new PropertyValueFactory<>("text"));
+			TableColumn<Transaction, String> debAcCol = new TableColumn<>("Debit Account");
 			debAcCol.setMinWidth(200);
-			TableColumn debAmCol = new TableColumn("Debit Amount");
+			debAcCol.setCellValueFactory(new PropertyValueFactory<>("debitAccount"));
+			TableColumn<Transaction, Double> debAmCol = new TableColumn<>("Debit Amount");
 			debAmCol.setMinWidth(200);
-			TableColumn credAcCol = new TableColumn("Credit Account");
+			debAmCol.setCellValueFactory(new PropertyValueFactory<>("debitAmount"));
+			TableColumn<Transaction, String> credAcCol = new TableColumn<>("Credit Account");
 			credAcCol.setMinWidth(200);
-			TableColumn credAmCol = new TableColumn("Credit Amount");
+			credAcCol.setCellValueFactory(new PropertyValueFactory<>("creditAccount"));
+			TableColumn<Transaction, Double> credAmCol = new TableColumn<>("Credit Amount");
 			credAmCol.setMinWidth(200);
+			credAmCol.setCellValueFactory(new PropertyValueFactory<>("creditAmount"));
 			
-			
+			table.setItems(this.tableData);
 			table.getColumns().addAll(nrCol,dateCol, textCol,debAcCol, debAmCol, credAcCol, credAmCol);
 			
 			root.setCenter(table);
