@@ -12,15 +12,17 @@ public class Controller {
 	
 	public Journal journal;
 	
+	public Controller() {
+		this.journal = new Journal();
+	}
+	
 	
 	public ObservableList<Transaction> load(Stage primaryStage) {
-		this.journal = new Journal();
 		// FileChooser, um Datei auszuwählen
 		FileChooser ch = new FileChooser();
 		ch.setTitle("Datei öffnen...");
 		File file = ch.showOpenDialog(primaryStage);
-		if (file == null) return null;
-		this.journal.open(file);
+		// Bug: Liste wird ersetzt, nicht angehängt (falls schon Transaktion manuell eingefügt wurde)
 		ObservableList<Transaction> tableData = FXCollections.observableArrayList(this.journal.getTransactions());
 		return tableData;
 	}
@@ -33,11 +35,11 @@ public class Controller {
 
 
 
-	public void submit(String text, String debitAc, String amount, String creditAc) {
+	public Transaction submit(String text, String debitAc, String amount, String creditAc) {
 		Transaction t = new Transaction(text, debitAc, Double.valueOf(amount), creditAc, Double.valueOf(amount));
-		System.out.println("Submit");
+		System.out.println(t);
 		this.journal.addTransaction(t);
-		
+		return t;
 	}
 
 }

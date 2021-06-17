@@ -27,7 +27,7 @@ import javafx.scene.layout.GridPane;
 public class Main extends Application {
 	
 	private TableView<Transaction> table = new TableView<>();
-	private ObservableList<Transaction> tableData;
+	private ObservableList<Transaction> tableData = FXCollections.observableArrayList();
 	private Stage primaryStage;
 	private Controller controller = new Controller();
 	
@@ -101,8 +101,9 @@ public class Main extends Application {
 			Button submit = new Button("Submit");
 			pane.add(submit, 0, 2);
 			submit.setOnAction(e -> {
-				//Controller.submit(textF.getText(), debitAcF.getText(), amountF.getText(), creditAcF.getText());
-				System.out.println("submit");
+				Transaction t = controller.submit(textF.getText(), debitAcF.getText(), amountF.getText(), creditAcF.getText());
+				tableData.add(t);
+				table.setItems(this.tableData);
 				});
 			
 			pane.setPadding(new Insets(10,10,10,10));
