@@ -2,6 +2,12 @@ package model;
 
 import java.time.LocalDate;
 
+/**
+ * Datenklasse für Transaktion
+ * @author Wiener, Goldfuß, Schöpp
+ * @version 11.0.9, 06/2021
+ */
+
 public class Transaction {
 	
 	private static int nrCounter= 0;

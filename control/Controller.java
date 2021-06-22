@@ -8,6 +8,12 @@ import javafx.stage.Stage;
 import model.Journal;
 import model.Transaction;
 
+/**
+ * Controller - aktualisiert Observable List, lädt und speichert
+ * @author Wiener, Goldfuß, Schöpp
+ * @version 11.0.9, 06/2021
+ */
+
 public class Controller {
 	
 	public Journal journal;
