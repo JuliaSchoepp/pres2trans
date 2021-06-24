@@ -1,5 +1,7 @@
 package control;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,25 +24,36 @@ public class Controller {
 		this.journal = new Journal();
 	}
 	
-	
+	// Load an existing csv file into the table view
 	public ObservableList<Transaction> load(Stage primaryStage) {
 		// FileChooser, um Datei auszuwählen
 		FileChooser ch = new FileChooser();
 		ch.setTitle("Datei öffnen...");
 		File file = ch.showOpenDialog(primaryStage);
-		// Bug: Liste wird ersetzt, nicht angehängt (falls schon Transaktion manuell eingefügt wurde)
+		this.journal.open(file);
+		// Achtung: Liste wird ersetzt, nicht angehängt (falls schon Transaktion manuell eingefügt wurde)
 		ObservableList<Transaction> tableData = FXCollections.observableArrayList(this.journal.getTransactions());
 		return tableData;
 	}
 	
-
-	public void save() {
-		// TODO Auto-generated method stub
+	// save the updated journal
+	public void save(Stage primaryStage) {
+		FileChooser fileChooser = new FileChooser();
+		File file = fileChooser.showSaveDialog(primaryStage);
+		String text = this.journal.toString();
+		
+		if (file != null) {
+			try {
+				FileWriter writer = new FileWriter(file);
+				writer.write(text);
+				writer.close();
+			} catch (IOException ex) {
+				System.out.println("Fehler beim Speichern!");
+			}
+		}
 	}
 	
-
-
-
+	// Submit transaction data entered in the textfield to view and model
 	public Transaction submit(String text, String debitAc, String amount, String creditAc) {
 		Transaction t = new Transaction(text, debitAc, Double.valueOf(amount), creditAc, Double.valueOf(amount));
 		System.out.println(t);

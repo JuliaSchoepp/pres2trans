@@ -50,7 +50,7 @@ public class Main extends Application {
 				table.setItems(this.tableData);
 			});
 			MenuItem speichern = new MenuItem("Save");
-			speichern.setOnAction(e -> controller.save());
+			speichern.setOnAction(e -> controller.save(primaryStage));
 			
 			save.getItems().addAll(laden,speichern);
 			bar.getMenus().add(save);
@@ -84,6 +84,7 @@ public class Main extends Application {
 			
 			root.setCenter(table);
 			
+			// Submit new data - unterer Teil
 			GridPane pane = new GridPane();
 			Label text = new Label("Text");
 			pane.add(text, 0, 0);
@@ -115,6 +116,7 @@ public class Main extends Application {
 			pane.setVgap(8);
 			pane.setHgap(10);
 			
+			// Zeigen
 			root.setBottom(pane);
 			Scene scene = new Scene(root,400,400);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
